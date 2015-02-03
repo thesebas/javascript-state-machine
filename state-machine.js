@@ -9,6 +9,8 @@
 
 (function () {
 
+  var keys = Object.keys || function(o,k,r){r=[];for(k in o)r.hasOwnProperty.call(o,k)&&r.push(k);return r};
+
   var StateMachine = {
 
     //---------------------------------------------------------------------------
@@ -81,6 +83,8 @@
       fsm.transitions = function()      { return transitions[this.current]; };
       fsm.isFinished  = function()      { return this.is(terminal); };
       fsm.error       = cfg.error || function(name, from, to, args, error, msg, e) { throw e || msg; }; // default behavior when something unexpected happens is to throw an exception, but caller can override this behavior if desired (see github issue #3 and #17)
+      fsm.allStates   = function(){ return keys(transitions); };
+      fsm.allEvents   = function(){ return keys(map); };
 
       if (initial && !initial.defer)
         fsm[initial.event]();
